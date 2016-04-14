@@ -4,10 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class wup {
@@ -24,18 +21,25 @@ public class wup {
 		String entireFile;
 		Boolean collect = false;
 		
+		
 		try(BufferedReader br = new BufferedReader(new FileReader(file))) {
 		    StringBuilder sb = new StringBuilder();
 		    String line = br.readLine();
+		    Scanner sca = new Scanner(line);
+		    int edges = 0, index = 0;
+		    
+		    while(sca.hasNextInt())
+		    	edges = sca.nextInt();
 		    
 		    while (line != null) {
 		    	sb.append(line);
 		        sb.append(System.lineSeparator());
 		        line = br.readLine();
-		        if(line != null && line.length() == 1)
+		        if(index >= edges)
 		        	collect = true;
 		        if(collect)
 		        	focuses.add(line);
+		        index++;
 		    }  
 		    entireFile = sb.toString();
 		}
@@ -67,7 +71,7 @@ public class wup {
 				
 				//Size and Edges are summed by 1 because a matrix in Java starts at 0
 				//0 will be desconsidered as long as it is not important here
-				Graph g = new Graph (sizeV+1, sizeE);
+				Graph g = new Graph (sizeV+1, sizeV+1);
 				
 				
 				for(int i=0; i<sizeE;i++){
@@ -84,13 +88,11 @@ public class wup {
 		//Store Sizes of vertices and edges
 		int sizeF = Integer.parseInt(focuses.remove(0));
 		
-		//sizeF = ary.remove(0);
-		
 		int j = 1;
 		
 		//Size and Edges are summed by 1 because a matrix in Java starts at 0
 		//0 will be desconsidered as long as it is not important here
-		Graph g = new Graph (6, sizeF+1);
+		Graph g = new Graph (sizeV+1, sizeF+1);
 		Scanner sc = new Scanner(focuses.get(0));
 		
 		for (int i = 0; i < focuses.size() - 1; i++){
@@ -104,13 +106,10 @@ public class wup {
 	}
 	
 	public static void main (String[] args) throws Exception {
+		//args[0] = "in2";
+		//args[1] = "out2";
 		GeneratingMatrix(args[0], args[1]);
 		GeneratingFocuses(args[1]);
-		
-		  // creates a FileWriter Object
-	      //FileWriter writer = new FileWriter(args[1]); 
-	      // Writes the content to the file
-	      //writer.write("This\n is\n an\n example\n"); 
-	      writer.close();
+	    writer.close();
 	}
 }

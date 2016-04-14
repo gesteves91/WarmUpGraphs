@@ -25,12 +25,12 @@ public class Graph {
     }
   }
   public Graph (int numVertices, int numEdges) {
-    this.mat = new int[numVertices][numVertices];
+    this.mat = new int[numVertices][numEdges];
     this.pos = new int[numVertices]; 
     this.numVertices = numVertices; 
     this.numEdges = numEdges;
     for (int i = 0; i < this.numVertices; i++) {
-      for (int j = 0; j < this.numVertices; j++) this.mat[i][j] = 0;
+      for (int j = 0; j < this.numEdges; j++) this.mat[i][j] = 0;
       this.pos[i] = -1; 
     }
   }
