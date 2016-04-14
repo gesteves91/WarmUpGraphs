@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 public class Graph {
   public static class Edge {
     private int v1, v2;
@@ -37,11 +40,6 @@ public class Graph {
   public boolean existEdge (int v1, int v2) {
     return (this.mat[v1][v2] > 0);
   }
-  public boolean listaAdjEmpty (int v) {
-    for (int i =0; i < this.numVertices; i++)
-      if (this.mat[v][i] > 0) return false;
-    return true;
-  }
 
   public Edge retiraAresta (int v1, int v2) {
     if (this.mat[v1][v2] == 0) return null;
@@ -50,28 +48,26 @@ public class Graph {
       this.mat[v1][v2] = 0; return aresta;
     }
   }
-  public void print () {
-    //System.out.print ("   ");
-    //for (int i = 0; i < this.numVertices; i++) 
-      //System.out.print (i + "   "); 
-    //System.out.println ();
+  public void print (BufferedWriter bw) throws IOException {
     for (int i = 1; i < this.numVertices; i++) { 
-      //System.out.print (i + "  ");
-      for (int j = 1; j < this.numVertices; j++)
+      for (int j = 1; j < this.numVertices; j++){
+    	bw.write(this.mat[i][j] + "   ");
+    	bw.flush();
         System.out.print (this.mat[i][j] + "   ");
+      }
+      bw.newLine();
       System.out.println ();
     }
   }
   
-  public void printFocuses () {
-	    //System.out.print ("   ");
-	    //for (int i = 0; i < this.numVertices; i++) 
-	      //System.out.print (i + "   "); 
-	    //System.out.println ();
+  public void printFocuses (BufferedWriter bw) throws IOException {
 	    for (int i = 1; i < this.numVertices; i++) { 
-	      //System.out.print (i + "  ");
-	      for (int j = 1; j < this.numEdges; j++)
-	        System.out.print (this.mat[i][j] + "   ");
+	      for (int j = 1; j < this.numEdges; j++){
+	        System.out.print(this.mat[i][j] + "   ");
+	        bw.write(this.mat[i][j] + "   ");
+	        bw.flush();
+	      }
+	      bw.newLine();
 	      System.out.println ();
 	    }
 	  }

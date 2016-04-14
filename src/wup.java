@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -9,14 +11,11 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class wup {
-	//Readline prompt option
-	static BufferedReader in = new BufferedReader (
-			new InputStreamReader (System.in));
-	
 	static ArrayList<Integer> ary = new ArrayList<Integer>();
 	static ArrayList<String> focuses = new ArrayList<String>();
-
-	static Map<Integer, Integer[]> map = new HashMap<Integer, Integer[]>();
+	
+	static FileWriter writer;
+	static BufferedWriter buffer;
 	
 	static int sizeV, sizeE;
 	
@@ -25,7 +24,7 @@ public class wup {
 		String entireFile;
 		Boolean collect = false;
 		
-		try(BufferedReader br = new BufferedReader(new FileReader("/Users/gesteves/Documents/workspace/TP_Grafos/src/input.txt"))) {
+		try(BufferedReader br = new BufferedReader(new FileReader(file))) {
 		    StringBuilder sb = new StringBuilder();
 		    String line = br.readLine();
 		    
@@ -44,11 +43,14 @@ public class wup {
 	}
 
 	//Generating Matrix
-	public static void GeneratingMatrix() throws FileNotFoundException, IOException{
+	public static void GeneratingMatrix(String inputFile, String outputFile) throws FileNotFoundException, IOException{
 		//Store Sizes of vertices and edges
 				int sizeE;
 				//Call the function to read the input file
-				String file = readInputFile("");
+				String file = readInputFile(inputFile);
+				
+				writer = new FileWriter(outputFile);
+				buffer = new BufferedWriter(writer);
 				
 				int j = 0;
 				Scanner sc = new Scanner(file);
@@ -75,10 +77,10 @@ public class wup {
 					g.insertEdge(y, x);
 				}
 
-				g.print (); 
+				g.print(buffer); 
 	}
 	
-	public static void GeneratingFocuses() throws FileNotFoundException, IOException{
+	public static void GeneratingFocuses(String outputFile) throws FileNotFoundException, IOException{
 		//Store Sizes of vertices and edges
 		int sizeF = Integer.parseInt(focuses.remove(0));
 		
@@ -98,57 +100,17 @@ public class wup {
 			j++;
 		}
 		
-			
-		//g.insertEdge(1, 1);
-		//g.insertEdge(1, 2);
-		//g.insertEdge(2, 1);
-		//g.insertEdge(3, 2);
-		//g.insertEdge(4, 2);
-		//g.insertEdge(4, 3);
-		//g.insertEdge(5, 4);
-		
-	
-		
-
-		g.printFocuses ();  in.readLine();
+		g.printFocuses (buffer); 
 	}
 	
 	public static void main (String[] args) throws Exception {
-		GeneratingMatrix();
-		GeneratingFocuses();
+		GeneratingMatrix(args[0], args[1]);
+		GeneratingFocuses(args[1]);
+		
+		  // creates a FileWriter Object
+	      //FileWriter writer = new FileWriter(args[1]); 
+	      // Writes the content to the file
+	      //writer.write("This\n is\n an\n example\n"); 
+	      writer.close();
 	}
 }
-
-/*    Grafo grafoT = grafo.grafoTransposto();
-grafoT.imprime ();  in.readLine();
-Grafo.Aresta a = lerAresta ();
-if (grafo.existeAresta (a.v1 (), a.v2 ())) 
-System.out.println ("Aresta ja existe");
-else {
-grafo.insereAresta (a.v1 (), a.v2 (), a.peso ()); // @{\it Duas chamadas porque}@    
-grafo.insereAresta (a.v2 (), a.v1 (), a.peso ()); // @{\it grafo n\~ao direcionado}@    
-}
-grafo.imprime (); in.readLine();
- */    
-/*System.out.print ("Lista adjacentes de: "); 
-int v1 = Integer.parseInt (in.readLine());
-if (!g.listaAdjEmpty (v1)) {
-	Graph.Edge adj = g.firstAdjMatrix(v1);
-	while (adj != null) {
-		System.out.println ("  " + adj.v2 ());
-		adj = g.proxAdj (v1);       
-	}
-	System.out.println (); in.readLine();
-}
-System.out.println ("Retira aresta: ");
-Graph.Edge a = lerAresta ();
-if (g.existEdge(a.v1 (), a.v2 ())) {
-	g.retiraAresta (a.v1 (), a.v2 ()); // @{\it Duas chamadas porque}@
-	g.retiraAresta (a.v2 (), a.v1 ()); // @{\it grafo n\~ao direcionado}@
-}
-else System.out.println ("Aresta nao existe");
-g.print (); in.readLine();
-System.out.print ("Existe aresta: "); a = lerAresta ();
-if (g.existEdge (a.v1 (), a.v2 ())) 
-	System.out.println ("  Sim");
-else System.out.println ("  Nao");*/
