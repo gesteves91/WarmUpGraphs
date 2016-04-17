@@ -10,7 +10,7 @@ public class Graph {
     public int v1 () { return this.v1; }
     public int v2 () { return this.v2; }
   }
-  private int mat[][]; 
+  public int mat[][]; 
   private int numVertices;
   private int numEdges;
   private int pos[];
@@ -40,14 +40,43 @@ public class Graph {
   public boolean existEdge (int v1, int v2) {
     return (this.mat[v1][v2] > 0);
   }
-
-  public Edge retiraAresta (int v1, int v2) {
-    if (this.mat[v1][v2] == 0) return null;
-    else {
-    	Edge aresta = new Edge (v1, v2);
-      this.mat[v1][v2] = 0; return aresta;
-    }
+  public boolean listaAdjVazia (int v) {
+	    for (int i =0; i < this.numVertices; i++)
+	      if (this.mat[v][i] > 0) return false;
+	    return true;
+	  }
+  public Edge primeiroListaAdj (int v) {
+	    this.pos[v] = -1; return this.proxAdj (v);
+	  }
+  public Edge proxAdj (int v) {
+	    this.pos[v] ++;
+	    while ((this.pos[v] < this.numVertices) && 
+	           (this.mat[v][this.pos[v]] == 0)) this.pos[v]++;
+	    if (this.pos[v] == this.numVertices) return null;
+	    else return new Edge (v, this.pos[v]);
+	  }
+  public String[] returnVertex(int v1){
+	  String[] ret = new String[mat[v1].length];
+	  ret[0] = Integer.toString(v1);
+	  for (int j = 1; j < mat[v1].length; j++)
+		  ret[j] = Integer.toString(mat[v1][j]);
+	  return ret;
   }
+  
+  //New fuction at works
+  //public int[][] returnList(){
+	//  int[][] list = new int[numVertices+1][numVertices+1];
+	 // for(int i = 1, k = 0; i < numVertices; i++, k++)
+		//  for(int j = 1, m = 0; j < numVertices; j++)
+			//  if(this.mat[i][j] == 1){
+				//  list[k][m] = j;
+				 // m++;
+			 // }
+				  
+	//return list;
+	//return list;
+  //}
+
   public void print (BufferedWriter bw) throws IOException {
     for (int i = 1; i < this.numVertices; i++) { 
       for (int j = 1; j < this.numVertices; j++){
@@ -72,5 +101,6 @@ public class Graph {
 	    }
 	  }
   public int numVertices () { return this.numVertices; }
+  public int numEdges () { return this.numEdges; }
 }
 
