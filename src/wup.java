@@ -16,7 +16,7 @@ public class wup {
 	static FileWriter writer;
 	static BufferedWriter buffer;
 
-	static int sizeV, sizeE, size;
+	static int sizeV, sizeF, sizeE, size;
 	static String[][] mat;
 	
 	//This variable indicates whether or not I have found a solution
@@ -95,14 +95,9 @@ public class wup {
 	
 	public static Graph GeneratingFocuses(String outputFile) throws FileNotFoundException, IOException{
 		//Store Sizes of vertices and edges
-		int sizeF = Integer.parseInt(focuses.remove(0));
+		sizeF = Integer.parseInt(focuses.remove(0));
 		
 		int j = 1;
-		
-		int num;
-		
-		//SumUp one because I want to store the element in the first position
-		//mat = new int[sizeV+1][sizeF+1];
 		
 		//Size and Edges are summed by 1 because a matrix in Java starts at 0
 		//0 will be desconsidered as long as it is not important here
@@ -121,7 +116,10 @@ public class wup {
 	}
 	
 	public static Boolean compareSolution(String[] focus){
-		String solution = "1111";
+		String solution = "";
+		//Creates the necessary solution 
+		for(int i = 0; i < sizeF; i++)
+			solution += "1";
 		String guessSol = "";
 		Boolean afir = false;
 		
@@ -148,7 +146,6 @@ public class wup {
 				
 		return res;
 	}
-
 	
 	public static void addToSolution(String[] s){
 		for(int i = 0; i < s.length; i++)
@@ -192,24 +189,12 @@ public class wup {
 				addToSolution(sol);
 				call = "";
 		}
-		
-		/*
-		while(data.size() != 0){
-			if(n == 2){
-				x = returnLine(Integer.toString(data.remove(0)));
-				y = returnLine(Integer.toString(data.remove(0)));
-			}
-			else {
-				x = returnLine(Integer.toString(data.remove(0)) + "," + Integer.toString(data.remove(0)));
-				y = returnLine(Integer.toString(data.remove(0)));
-			}*/
-			
-		}
+	}
 	
 	
 	public static String[][] copyMatrix(Graph p){
 		  //String[][] ret = new String[p.numVertices()-1][p.numEdges()];
-		String[][] ret = new String[100][p.numEdges()];
+		String[][] ret = new String[(int) Math.pow(2, p.numVertices())][p.numEdges()];
 		  //ret[0] = Integer.toString(v1); 
 		  for (int i = 1, m = 0; i < p.numVertices(); i++, m++)
 			  for (int j = 0, n = 0; n < p.numEdges(); j++, n++){
@@ -225,12 +210,7 @@ public class wup {
 		so = so.replaceAll(",", " ");
 		ArrayList<Integer> arrl = new ArrayList<Integer>();
 		ArrayList<Integer> solut = new ArrayList<Integer>();
-		//Extract all first positions
-	
 		Scanner scc = new Scanner(so);
-		
-		//Scanner scc = new Scanner(vertices);
-		//int a, b;
 		
 		int index = 0;
 		
@@ -238,11 +218,6 @@ public class wup {
 			arrl.add(scc.nextInt());
 			index++;
 		}
-		
-		
-		
-		//a = scc.nextInt();
-		//b = scc.nextInt();
 		
 		Graph subg = new Graph(sizeV+1);
 		
@@ -261,22 +236,9 @@ public class wup {
 			subg.insertEdge(x,y);
 			subg.insertEdge(y,x);
 		}
-			
-			
-		//rg.insertEdge(1, 2); 
-		//rg.insertEdge(2, 1); 
-		//rg.insertEdge(1, 3);
-		//rg.insertEdge(3, 1);
-		//;
-		
-		//rg.insertEdge(4, 5); 
-		//rg.insertEdge(5, 4); 
 		
 		BFS bfs = new BFS (subg);
 	    bfs.buscaEmLargura();
-	    //for (int v = 0; v < grafo.numVertices(); v++) {
-	      //System.out.println ("d["+v+"]:" + bfs.d (v) + " -- antecessor["+v+"]:" + bfs.antecessor (v));      
-	    //}
 	    
 	    int first = arrl.remove(0);
 	    while(arrl.size()!=0){
@@ -286,38 +248,68 @@ public class wup {
 	    done = bfs.Exists;
 	    
 	    //Print the first smallest solution
-	    if(bfs.Exists)
-	    	System.out.println(so);
+	    //while(!done){
+	    	if(done){
+	    		System.out.println(so);
+	    		buffer.write(so);
+	    		buffer.flush();
+	    	}
+	    //}
 	}
 	
 	
+	public static void bestCase() throws Exception{
+		String[] sol = new String[mat[0].length];
+		
+		for(int i = 0; i < mat[0].length; i++){
+			for(int j = 0; j < mat[0].length; j++)
+				sol[j] = mat[i][j];
+			if(compareSolution(sol)){
+				solutions.add(sol[0]);
+				done = true;
+				String so = solutions.remove(0);
+				System.out.println(so);
+			}
+		}
+		
+	}
+	
+	public static void worstCase(){
+		
+	}
+	
 	public static void main (String[] args) throws Exception {
-		args[0] = "/Users/gesteves/Documents/workspace/WarmUP/src/in0";
-		args[1] = "/Users/gesteves/Documents/workspace/WarmUP/src/out0";
+		args[0] = "/Users/gesteves/Documents/workspace/WarmUP/src/in3";
+		args[1] = "/Users/gesteves/Documents/workspace/WarmUP/src/out3";
 		Graph g1 = GeneratingMatrix(args[0], args[1]);
 		Graph g = GeneratingFocuses(args[1]);
-		//for (int i : g.returnVertex(4))
-			//System.out.println(i);
 		String[] a1 = g.returnVertex(1);
 		String[] a2 = g.returnVertex(4);
-		//System.out.println(compareSolution(a1));
-	    
+		
+		//Populate the main matrix with the results coming from the graph
 	    mat = copyMatrix(g);
 	    
-	    Permutation p = new Permutation();
-		int arr[] = {1, 2, 3, 4, 5};
-        int r = 1;
-        int n = arr.length;
-        //p.printCombination(arr, n, r);
-        
-        do{
-        	r++;
-        	p.printCombination(arr, n, r); //Generating possible combinations
-        	populateMat(p.aux, r); 
-        	while (solutions.size() != 0)
-        	    testConnectivity();
-        } while (!done);
-        
+	    //Test if any one vertex is able to get all focuses done
+	    bestCase();
+	    
+	    
+	    if(!done){
+	    	Permutation p = new Permutation();
+	    	int[] arr = new int[sizeV];
+	    	for (int i = 0; i < sizeV; i++)
+	    		arr[i] = i+1;
+	    	int r = 2;
+	    	int n = arr.length;
+
+	    	do{
+	    		p.printCombination(arr, n, r); //Generating possible combinations
+	    		populateMat(p.aux, r); 
+	    		while (solutions.size() != 0 && !done)
+	    			testConnectivity();
+	    		r++;
+	    	} while (!done);
+	    }
+
         //while (!done){
         	//populateMat(p.aux, r); //populate solution matriz is res for populating solutions array
         	//while (solutions.size() != 0)
@@ -383,17 +375,5 @@ public class wup {
 	    	//System.out.println();
 	    //}
 	    //System.out.println(compareSolution(new String[]{"1,2", "1", "1","1","1"}));
-        
-	    
-		//String[] res = sumUpVertices(a1, a2);
-		//for (String i : res)
-			//-System.out.print(i + " ");
-	
-		//BFS bfs = new BFS (cu);
-	    //bfs.buscaEmLargura();
-	    //for (int v = 0; v < grafo.numVertices(); v++) {
-	      //System.out.println ("d["+v+"]:" + bfs.d (v) + " -- antecessor["+v+"]:" + bfs.antecessor (v));      
-	    //}
-	    //bfs.imprimeCaminho (1, 4);
 	}
 }
