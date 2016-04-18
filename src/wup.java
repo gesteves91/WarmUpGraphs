@@ -274,13 +274,16 @@ public class wup {
 		
 	}
 	
-	public static void worstCase(){
-		
-	}
-	
 	public static void main (String[] args) throws Exception {
-		args[0] = "/Users/gesteves/Documents/workspace/WarmUP/src/in3";
-		args[1] = "/Users/gesteves/Documents/workspace/WarmUP/src/out3";
+		long startTime = System.currentTimeMillis();
+
+	      long total = 0;
+	      for (int i = 0; i < 10000000; i++) {
+	         total += i;
+	      }
+
+		args[0] = "/Users/gesteves/Documents/workspace/WarmUP/src/in5";
+		args[1] = "/Users/gesteves/Documents/workspace/WarmUP/src/out5";
 		Graph g1 = GeneratingMatrix(args[0], args[1]);
 		Graph g = GeneratingFocuses(args[1]);
 		String[] a1 = g.returnVertex(1);
@@ -309,71 +312,9 @@ public class wup {
 	    		r++;
 	    	} while (!done);
 	    }
-
-        //while (!done){
-        	//populateMat(p.aux, r); //populate solution matriz is res for populating solutions array
-        	//while (solutions.size() != 0)
-        	  //  testConnectivity();
-        	//r++;
-        	//p.printCombination(arr, n, r);
-        //}
-        
-       // r = 3;
-        //p.printCombination(arr, n, r);
-        
-        //populateMat(p.aux, 3);
-        
-        //r = 4;
-        //p.printCombination(arr, n, r);
-        
-        //populateMat(p.aux, 4);
-        
-        //r = 5;
-        //p.printCombination(arr, n, r);
-        
-        //populateMat(p.aux, 5);
-        
-        //for (String s : solutions)
-        	//System.out.println(s);
-        
-        //while (solutions.size() != 0)
-    	    //testConnectivity();
-    	    
-    	    
-    	    //writer.close();
 	    
-	    //for(String[] b : mat){
-    	//for(String elem : b)
-    		//System.out.print(elem + " ");
-    	//System.out.println();
-	    //}
-	    
-	    //for(int i = 0, k = 0; i < solutions.size();i++){
-	    	//while(k<5){
-	    	//System.out.print(solutions.remove(0));
-	    	//k++;
-	    	//}
-	    	//k = 0;
-	    	//System.out.println();
-	    //}
-	    
-	    //for (int i : vertices)
-	    //System.out.println(i);
-	    
-	    //String[] st = returnLine(5);
-	    
-	    //for(String s34: st)
-	    	//System.out.print(s34 + " ");
-    
-	    
-	    //int[][] ass = g1.returnList();
-	    
-	    //for(int[] b : mat){
-	    	//for(int elem : b){
-	    		//System.out.print(elem + " ");
-	    	//}
-	    	//System.out.println();
-	    //}
-	    //System.out.println(compareSolution(new String[]{"1,2", "1", "1","1","1"}));
+	    long stopTime = System.currentTimeMillis();
+	    long elapsedTime = stopTime - startTime;
+	    System.out.println(elapsedTime);
 	}
 }
