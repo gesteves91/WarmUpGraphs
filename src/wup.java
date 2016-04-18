@@ -11,17 +11,16 @@ import java.util.Scanner;
 public class wup {
 	static ArrayList<Integer> ary = new ArrayList<Integer>();
 	static ArrayList<String> focuses = new ArrayList<String>();
-	
+	static ArrayList<String> solutions = new ArrayList<String>();
+	static ArrayList<Integer> vertices = new ArrayList<Integer>();
 	static FileWriter writer;
 	static BufferedWriter buffer;
-	
-	static int sizeV, sizeE;
-	
+
+	static int sizeV, sizeE, size;
 	static String[][] mat;
 	
-	static int size;
-	
-	static ArrayList<String> solutions = new ArrayList<String>();
+	//This variable indicates whether or not I have found a solution
+	static Boolean done = false;
 	
 	//ReadInput
 	public static String readInputFile(String file) throws FileNotFoundException, IOException{
@@ -84,6 +83,8 @@ public class wup {
 				for(int i=0; i<sizeE;i++){
 					x = ary.remove(0);
 					y = ary.remove(0);
+					vertices.add(x);
+					vertices.add(y);
 					g.insertEdge(x,y);
 					g.insertEdge(y,x);
 				}
@@ -147,53 +148,7 @@ public class wup {
 				
 		return res;
 	}
-	/*
-	public static void permutation(int[] a, Graph g){
-		int[] x;
-		int[] y;
-		String[] sol;
-		Boolean result;
-		for(int i = 0; i < a.length - 1; i++)
-			for(int j = i + 1; j < a.length; j++){
-				x = g.returnVertex(a[i]);
-				y = g.returnVertex(a[j]);
-				sol = sumUpVertices(x, y); 
-				//result = compareSolution(sol);
-				System.out.print(compareSolution(sol));
-			}
-	}
-	*/
-	public static void permutationRec(String[] a, String[] c, Graph g){
-		Boolean stop = false;
 
-		if(c.length == 0 || c[0] == null){
-			stop = true;
-		}
-
-		String[] x;
-		String[] y;
-		String[] sol;
-		Boolean result;
-		String[] s = new String[4];
-
-		if(!stop){
-			for(int i = 0; i < 1; i++){
-				for(int j = 0; j < c.length; j++){
-					x = returnLine(a[i]);
-					y = returnLine(c[j]);
-					sol = sumUpVertices(x, y); 
-					s[j] = sol[0];
-					addToSolution(sol);
-					//result = compareSolution(sol);
-					System.out.print(compareSolution(sol));
-				}
-				//permutationRec(s, Arrays.copyOfRange(c, 1, c.length), g);
-				permutationRec(Arrays.copyOfRange(a, 1, a.length), Arrays.copyOfRange(c, 1, c.length), g);
-				//if(s.length == a.length)
-				permutationRec(Arrays.copyOfRange(s, 1, s.length), Arrays.copyOfRange(s, 1, s.length), g);
-			}
-		}
-	}
 	
 	public static void addToSolution(String[] s){
 		for(int i = 0; i < s.length; i++)
@@ -233,8 +188,7 @@ public class wup {
 				y = returnLine(a[n-1]);
 				sol = sumUpVertices(x, y);
 				if(compareSolution(sol))
-					for(String ss : sol)
-					solutions.add(ss);
+					solutions.add(sol[0]);
 				addToSolution(sol);
 				call = "";
 		}
@@ -266,20 +220,74 @@ public class wup {
 		  return ret;
 	  }
 	
-	public static void testConnectivity(String vertices){
-		Scanner scc = new Scanner(vertices);
-		int a, b;
+	public static void testConnectivity() throws Exception{
+		String so = solutions.remove(0);
+		so = so.replaceAll(",", " ");
+		ArrayList<Integer> arrl = new ArrayList<Integer>();
+		ArrayList<Integer> solut = new ArrayList<Integer>();
+		//Extract all first positions
+	
+		Scanner scc = new Scanner(so);
 		
-		a = scc.nextInt();
-		b = scc.nextInt();
+		//Scanner scc = new Scanner(vertices);
+		//int a, b;
 		
-		Graph cu = new Graph(6);
-		cu.insertEdge(1, 2); 
-		cu.insertEdge(2, 1); 
-		cu.insertEdge (1, 3);
-		cu.insertEdge (3, 1);
-		cu.insertEdge (4, 5); 
-		cu.insertEdge (5, 4); 
+		int index = 0;
+		
+		while(scc.hasNextInt()){
+			arrl.add(scc.nextInt());
+			index++;
+		}
+		
+		
+		
+		//a = scc.nextInt();
+		//b = scc.nextInt();
+		
+		Graph subg = new Graph(sizeV+1);
+		
+		for(int i = 0; i < vertices.size(); i+=2)
+			for(int j = 0; j < arrl.size(); j++)
+				if (arrl.get(j) == vertices.get(i)){
+					solut.add(vertices.get(i));
+					solut.add(vertices.get(i+1));
+				}
+		
+		int x, y;
+		
+		while(solut.size() != 0){
+			x = solut.remove(0);
+			y = solut.remove(0);
+			subg.insertEdge(x,y);
+			subg.insertEdge(y,x);
+		}
+			
+			
+		//rg.insertEdge(1, 2); 
+		//rg.insertEdge(2, 1); 
+		//rg.insertEdge(1, 3);
+		//rg.insertEdge(3, 1);
+		//;
+		
+		//rg.insertEdge(4, 5); 
+		//rg.insertEdge(5, 4); 
+		
+		BFS bfs = new BFS (subg);
+	    bfs.buscaEmLargura();
+	    //for (int v = 0; v < grafo.numVertices(); v++) {
+	      //System.out.println ("d["+v+"]:" + bfs.d (v) + " -- antecessor["+v+"]:" + bfs.antecessor (v));      
+	    //}
+	    
+	    int first = arrl.remove(0);
+	    while(arrl.size()!=0){
+	    	bfs.imprimeCaminho(first, arrl.remove(0));
+	    }
+	   
+	    done = bfs.Exists;
+	    
+	    //Print the first smallest solution
+	    if(bfs.Exists)
+	    	System.out.println(so);
 	}
 	
 	
@@ -293,57 +301,54 @@ public class wup {
 		String[] a1 = g.returnVertex(1);
 		String[] a2 = g.returnVertex(4);
 		//System.out.println(compareSolution(a1));
-		
-		
-		
-		//Graph cu = new Graph(6);
-		//cu.insertEdge(1, 2); 
-		//cu.insertEdge(2, 1); 
-		//cu.insertEdge (1, 3);
-		//cu.insertEdge (3, 1);
-		//cu.insertEdge (4, 5); 
-		//cu.insertEdge (5, 4); 
-	    
-		//String[] res = sumUpVertices(a1, a2);
-		//for (String i : res)
-			//-System.out.print(i + " ");
-	
-		//BFS bfs = new BFS (cu);
-	    //bfs.buscaEmLargura();
-	    //for (int v = 0; v < grafo.numVertices(); v++) {
-	      //System.out.println ("d["+v+"]:" + bfs.d (v) + " -- antecessor["+v+"]:" + bfs.antecessor (v));      
-	    //}
-	    //bfs.imprimeCaminho (1, 4);
 	    
 	    mat = copyMatrix(g);
 	    
 	    Permutation p = new Permutation();
 		int arr[] = {1, 2, 3, 4, 5};
-        int r = 2;
+        int r = 1;
         int n = arr.length;
-        p.printCombination(arr, n, r);
+        //p.printCombination(arr, n, r);
         
-        populateMat(p.aux, 2);
+        do{
+        	r++;
+        	p.printCombination(arr, n, r); //Generating possible combinations
+        	populateMat(p.aux, r); 
+        	while (solutions.size() != 0)
+        	    testConnectivity();
+        } while (!done);
         
-        r = 3;
-        p.printCombination(arr, n, r);
+        //while (!done){
+        	//populateMat(p.aux, r); //populate solution matriz is res for populating solutions array
+        	//while (solutions.size() != 0)
+        	  //  testConnectivity();
+        	//r++;
+        	//p.printCombination(arr, n, r);
+        //}
         
-        populateMat(p.aux, 3);
+       // r = 3;
+        //p.printCombination(arr, n, r);
         
-        r = 4;
-        p.printCombination(arr, n, r);
+        //populateMat(p.aux, 3);
         
-        populateMat(p.aux, 4);
+        //r = 4;
+        //p.printCombination(arr, n, r);
         
-        r = 5;
-        p.printCombination(arr, n, r);
+        //populateMat(p.aux, 4);
         
-        populateMat(p.aux, 5);
+        //r = 5;
+        //p.printCombination(arr, n, r);
         
- 
-	    //String[] bbvb = new String[]{"1","2","3","4","5"};
-	    //String[] bbcb = new String[]{"2","3","4","5"};
-	    //permutationRec(bbvb, bbcb, g);
+        //populateMat(p.aux, 5);
+        
+        //for (String s : solutions)
+        	//System.out.println(s);
+        
+        //while (solutions.size() != 0)
+    	    //testConnectivity();
+    	    
+    	    
+    	    //writer.close();
 	    
 	    //for(String[] b : mat){
     	//for(String elem : b)
@@ -351,14 +356,17 @@ public class wup {
     	//System.out.println();
 	    //}
 	    
-	    for(int i = 0, k = 0; i < solutions.size();i++){
-	    	while(k<5){
-	    	System.out.print(solutions.remove(0));
-	    	k++;
-	    	}
-	    	k = 0;
-	    	System.out.println();
-	    }
+	    //for(int i = 0, k = 0; i < solutions.size();i++){
+	    	//while(k<5){
+	    	//System.out.print(solutions.remove(0));
+	    	//k++;
+	    	//}
+	    	//k = 0;
+	    	//System.out.println();
+	    //}
+	    
+	    //for (int i : vertices)
+	    //System.out.println(i);
 	    
 	    //String[] st = returnLine(5);
 	    
@@ -375,9 +383,17 @@ public class wup {
 	    	//System.out.println();
 	    //}
 	    //System.out.println(compareSolution(new String[]{"1,2", "1", "1","1","1"}));
+        
 	    
-	    
-	    
-	    writer.close();
+		//String[] res = sumUpVertices(a1, a2);
+		//for (String i : res)
+			//-System.out.print(i + " ");
+	
+		//BFS bfs = new BFS (cu);
+	    //bfs.buscaEmLargura();
+	    //for (int v = 0; v < grafo.numVertices(); v++) {
+	      //System.out.println ("d["+v+"]:" + bfs.d (v) + " -- antecessor["+v+"]:" + bfs.antecessor (v));      
+	    //}
+	    //bfs.imprimeCaminho (1, 4);
 	}
 }
