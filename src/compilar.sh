@@ -1,2 +1,2 @@
 #!/bin/bash
-javac wup.java
+javac ZikaZeroZ.java

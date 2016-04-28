@@ -80,11 +80,11 @@ public class Graph {
   public void print (BufferedWriter bw) throws IOException {
     for (int i = 1; i < this.numVertices; i++) { 
       for (int j = 1; j < this.numVertices; j++){
-    	bw.write(this.mat[i][j] + "   ");
-    	bw.flush();
+    	//bw.write(this.mat[i][j] + "   ");
+    	//bw.flush();
         System.out.print (this.mat[i][j] + "   ");
       }
-      bw.newLine();
+      //bw.newLine();
       System.out.println ();
     }
   }
@@ -93,10 +93,10 @@ public class Graph {
 	    for (int i = 1; i < this.numVertices; i++) { 
 	      for (int j = 1; j < this.numEdges; j++){
 	        System.out.print(this.mat[i][j] + "   ");
-	        bw.write(this.mat[i][j] + "   ");
-	        bw.flush();
+	        //bw.write(this.mat[i][j] + "   ");
+	        //bw.flush();
 	      }
-	      bw.newLine();
+	      //bw.newLine();
 	      System.out.println ();
 	    }
 	  }
