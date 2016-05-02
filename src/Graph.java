@@ -82,22 +82,22 @@ public class Graph {
       for (int j = 1; j < this.numVertices; j++){
     	//bw.write(this.mat[i][j] + "   ");
     	//bw.flush();
-        System.out.print (this.mat[i][j] + "   ");
+        //System.out.print (this.mat[i][j] + "   ");
       }
       //bw.newLine();
-      System.out.println ();
+      //System.out.println ();
     }
   }
   
   public void printFocuses (BufferedWriter bw) throws IOException {
 	    for (int i = 1; i < this.numVertices; i++) { 
 	      for (int j = 1; j < this.numEdges; j++){
-	        System.out.print(this.mat[i][j] + "   ");
+	        //System.out.print(this.mat[i][j] + "   ");
 	        //bw.write(this.mat[i][j] + "   ");
 	        //bw.flush();
 	      }
 	      //bw.newLine();
-	      System.out.println ();
+	      //System.out.println ();
 	    }
 	  }
   public int numVertices () { return this.numVertices; }
